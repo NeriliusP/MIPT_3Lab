@@ -1,86 +1,32 @@
 package com.example.calculator
 
-import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import com.example.calculator.databinding.ActivityMainBinding
 import kotlin.math.sqrt
 
-class MainActivity : AppCompatActivity() {
-    private var canAddOperation = false
-    private var canAddDecimal = true
-    private lateinit var binding: ActivityMainBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-    }
-
-    @SuppressLint("SuspiciousIndentation")
-    fun numberAction(view: View) {
-        if (view is Button) {
-            if (view.text == ".") {
-                if (canAddDecimal)
-                    binding.displayView.append(view.text)
-
-                    canAddDecimal = false
-                } else
-                    binding.displayView.append(view.text)
-
-                canAddOperation = true
-            }
-        }
-    fun operatorAction(view: View)
+public class CalculatorActivity {
+    public fun allClearAction(input: String) : String
     {
-        if(view is Button && canAddOperation && view.text!="±")
-        {
-            binding.displayView.append(view.text)
-            canAddOperation = false
-            canAddDecimal = true
-        }
-        else if(view is Button && view.text=="√")
-        {
-            binding.displayView.append(view.text)
-            canAddOperation = false
-            canAddDecimal = false
-        }
-        else if(view is Button && view.text=="±")
-        {
-            if(binding.displayView.text.startsWith("-"))
-            {
-                binding.displayView.text=binding.displayView.text.substring(1)
-            }
-            else
-            {
-                binding.displayView.text="-"+binding.displayView.text
-            }
-        }
+        var result = input
+        result=""
+        return result
     }
-    fun equalsAction(view: View)
+    public fun backSpaceAction(input: String) : String
     {
-        binding.displayView.text = calculateResults()
-    }
-    fun allClearAction(view: View)
-    {
-        binding.displayView.text=""
-    }
-    fun backSpaceAction(view: View)
-    {
-        if (binding.displayView.text.length>1)
+        var result = input
+        if (result.length>1)
         {
-            binding.displayView.text = binding.displayView.text.substring(0, binding.displayView.text.length-1)
+            result = result.substring(0, result.length-1)
         }
         else
         {
-            binding.displayView.text=""
+            result=""
         }
+        return result
 
     }
-    private fun calculateResults(): String
+    public fun calculateResults(input: String): String
     {
-        val digitsOperators = digitsOperators()
+        val digitsOperators = digitsOperators(input)
         if(digitsOperators.isEmpty()) return ""
 
         val timesDivision = timesDivisionCalculate(digitsOperators)
@@ -196,11 +142,11 @@ class MainActivity : AppCompatActivity() {
         return newList
     }
 
-    private fun digitsOperators(): MutableList<Any>
+    private fun digitsOperators(input: String): MutableList<Any>
     {
         val list = mutableListOf<Any>()
         var currentDigit = ""
-        for(character in binding.displayView.text)
+        for(character in input)
         {
             if(character.isDigit() || character == '.')
                 currentDigit += character
@@ -217,7 +163,4 @@ class MainActivity : AppCompatActivity() {
 
         return list
     }
-
-
-
 }
